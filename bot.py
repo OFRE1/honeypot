@@ -122,7 +122,7 @@ async def on_message(message: discord.Message):
 
     # Timeout 5 phút
     try:
-        await.message.author.ban(
+        await message.author.ban(
             reason="Honeypot triggered"
         )
 
