@@ -4,6 +4,30 @@ from datetime import timedelta
 import discord
 from discord import app_commands
 from discord.ext import commands
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+
+class HealthCheck(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"OK")
+
+    def log_message(self, format, *args):
+        pass
+
+
+def run_healthcheck():
+    port = int(os.environ.get("PORT", 10000))
+    server = HTTPServer(("0.0.0.0", port), HealthCheck)
+    server.serve_forever()
+
+
+threading.Thread(
+    target=run_healthcheck,
+    daemon=True
+).start()
+
 
 
 TOKEN = os.getenv("DISCORD_TOKEN")
